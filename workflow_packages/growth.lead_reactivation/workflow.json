@@ -1,0 +1,48 @@
+{
+  "package_format": "tin-workflow-package-v1",
+  "definition": {
+    "key": "growth.lead_reactivation",
+    "title": "Reactivate leads",
+    "description": "Create a concise reactivation plan for supplied inactive leads.",
+    "version": "1.0.0",
+    "executor": "workflow.code",
+    "schedule_modes": ["on_demand"],
+    "human_review": {
+      "eligible": true,
+      "summary": "Review the lead reactivation plan"
+    },
+    "input_schema": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "project_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "leads": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 8,
+          "items": {
+            "type": "string",
+            "maxLength": 500
+          },
+          "title": "Leads to reactivate"
+        }
+      },
+      "required": ["project_id", "leads"]
+    },
+    "code": {
+      "runtime": "python3.12.8-stdlib-v1",
+      "entrypoint": "main.py",
+      "files": ["main.py"],
+      "timeout_seconds": 60,
+      "output": {
+        "kind": "project.artifact",
+        "path": "reports/LEAD_REACTIVATION.md",
+        "media_type": "text/markdown",
+        "max_bytes": 8000
+      }
+    }
+  }
+}
